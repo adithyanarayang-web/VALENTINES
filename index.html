@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Anamika ❤️</title>
+
   <style>
     :root{
       --bg1:#ffe6ee;
@@ -16,28 +17,29 @@
       --shadow: 0 20px 60px rgba(0,0,0,.15);
     }
     *{box-sizing:border-box}
-   body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-  min-height:100vh;
 
-  /* ✅ allow scrolling on mobile */
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      min-height:100vh;
 
-  /* ✅ don’t lock the page */
-  display: block;
+      /* ✅ allow scrolling on mobile */
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
 
-  background:
-    radial-gradient(1200px 700px at 20% 10%, #fff6, transparent 60%),
-    radial-gradient(900px 600px at 80% 20%, #fff4, transparent 55%),
-    linear-gradient(135deg, var(--bg1), var(--bg2));
-  color:var(--text);
-  .gate, .card{
-  margin: 18px auto;
-}
-}
+      /* ✅ don’t lock the page */
+      display: block;
+
+      background:
+        radial-gradient(1200px 700px at 20% 10%, #fff6, transparent 60%),
+        radial-gradient(900px 600px at 80% 20%, #fff4, transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      color:var(--text);
+    }
+
+    /* ✅ FIX: these were accidentally nested inside body {} */
+    .gate, .card{ margin: 18px auto; }
 
     .floating-hearts{position:fixed; inset:0; pointer-events:none; opacity:.55;}
     .heart{
@@ -508,7 +510,7 @@
       <input id="gateInput" placeholder="Type it here…" autocomplete="off" />
       <button class="btn-yes" id="gateBtn">Unlock 🔓</button>
     </div>
-    <small>Hint: it’s one of your nicknames (Annama / Yeoboo / Kutts).</small>
+    <small id="gateMsg">Hint: it’s one of your nicknames (Annama / Yeoboo / Kutts).</small>
   </div>
 
   <!-- MAIN -->
@@ -674,7 +676,7 @@
 
     const favoriteVibe = "It’s always the time I spend with you. Every moment with you counts as my favorite.";
 
-    // Your photos
+    // Your photos (keep images in same folder as index.html OR use folder paths like "photos/IMG_....JPG")
     const photos = ["IMG_4966.JPG","IMG_5015.JPG","IMG_5261.JPG","IMG_5548.JPG"];
 
     // The final message (exactly what you wrote)
@@ -689,10 +691,10 @@
       {
         type: "mcq",
         title: "Level 1: Identify the main character 😌",
-        prompt: `Who is the prettiest girl (inside AND outside)?`,
-        options: ["Anamika 😌", "Random person", "The moon (nice try)"],
+        prompt: `when did i propose you?`,  // ✅ FIX: added comma
+        options: ["18 Oct", "17 Oct", "20 Oct"],
         correctIndex: 0,
-        hint: "Hint: it’s you, Annama. Always you."
+        hint: "Hint: you know it"
       },
       {
         type: "input",
@@ -703,9 +705,9 @@
       },
       {
         type: "mcq",
-        title: "Level 3: Apputy’s favorite memory 🥹",
-        prompt: `Apputy’s favorite memory with you is…`,
-        options: ["Every time we are together", "Only one day", "Only when there’s food 😤"],
+        title: "Level 3: when was our First kiss",
+        prompt: `our first was on…`,
+        options: ["25 Dec", "26 Dec", "nov 16"],
         correctIndex: 0,
         hint: "Hint: Every moment with you counts as the favorite."
       },
@@ -713,7 +715,7 @@
         type: "mcq",
         title: "Level 4: Future vibes 🌙",
         prompt: `How is our future going to be?`,
-        options: ["Adipoloooo 😤💖", "Boring", "We will forget each other (never)"],
+        options: ["Adipoliiii 😤💖", "Boring", "We will forget each other (never)"],
         correctIndex: 0,
         hint: "Hint: the answer has extra O’s 😌"
       },
@@ -767,7 +769,7 @@ ${yourName} 💖`;
     function updateCountdown(){
       const now = new Date();
       const year = now.getFullYear();
-      const target = new Date(year, 1, 14, 0, 0, 0);
+      const target = new Date(year, 1, 14, 0, 0, 0); // Feb 14
       if(now > target) target.setFullYear(year + 1);
       const diff = target - now;
       const d = Math.floor(diff / (1000*60*60*24));
@@ -810,6 +812,7 @@ ${yourName} 💖`;
     const gate = document.getElementById("gate");
     const gateInput = document.getElementById("gateInput");
     const gateBtn = document.getElementById("gateBtn");
+    const gateMsg = document.getElementById("gateMsg");
     const app = document.getElementById("app");
 
     function normalize(s){ return (s || "").trim().toLowerCase(); }
@@ -822,6 +825,7 @@ ${yourName} 💖`;
         sparkleBurst(18);
         popConfetti(180, 1800);
       }else{
+        gateMsg.textContent = "Nope 😌 try again (hint: Annama / Yeoboo / Kutts)";
         gate.classList.remove("shake");
         void gate.offsetWidth;
         gate.classList.add("shake");
@@ -876,7 +880,6 @@ ${yourName} 💖`;
     // QUEST GAME
     // =========================
     const startQuestBtn = document.getElementById("startQuestBtn");
-    const questPanel = document.getElementById("questPanel");
     const questBox = document.getElementById("questBox");
     const questHint = document.getElementById("questHint");
     const levelChip = document.getElementById("levelChip");
